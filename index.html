@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue Demo</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Work+Sans:300&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="styles/style.css">
+	<script src="https://kit.fontawesome.com/93c0a58cd7.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<!-- start body -->
+<div id="app">
+	<div id="sideBar">
+		<h1>{{branding}}</h1>
+		<p>You can change the text above with this input</p>
+		<input v-model="branding">
+		<button id="addCard">Add A card</button>
+	</div>
+	<transition-group name="list" tag="div" id="content">
+		<basic-card
+			v-for="item in items"
+			v-bind:key="item.idx"
+			v-bind:item="item"
+			v-on:remove="remove(item.idx)"
+		></basic-card>
+	</transition-group>
+	<transition name="fade">
+		<div v-show="editor.open" id="editor" v-on:click="editor.open=!editor.open">
+			<div v-on:click.stop>
+				<button v-on:click="editor.open=!editor.open">Close</button>
+				<h3>Editor</h3>
+				<input v-model="editor.dataToEdit.title">
+				<textarea v-model="editor.dataToEdit.content"></textarea>
+			</div>
+		</div>
+	</transition>
+</div>
+
+
+
+<!-- start vue script -->
+<script type="text/javascript">
+
+let app = new Vue({
+	el:'#app',
+	data:{
+		items:[],
+		branding:'Vue.js Demo',
+		editor:{
+			open:false,
+			dataToEdit:{
+				title:null,
+				content:null,
+			}
+		}//end editor data
+	},//end data
+	methods:{
+		addItem:function(){
+			this.items.push({
+				title:'Lorem Ipsum',
+				content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+				rmv:'delete',
+				idx:this.items.length
+			});
+		},
+		remove:function(idx){
+			this.numItems
+			this.items.splice(idx,1);
+			//reset all idx so delete works
+			//as expected
+			this.items.forEach((item,idx)=>{
+				item.idx = idx;
+			})
+		}
+	}
+});
+//make card list component
+Vue.component('basic-card',{
+	props:['item'],
+	methods:{
+		toggleEditor:function(){
+			app.editor.open = !app.editor.open;
+			app.editor.dataToEdit = this.item;
+		},
+		shuffle:function(){
+			this.item.content = this.item.content.split('').sort(function(){return 0.5-Math.random()}).join('');
+			this.item.title =this.item.title.split('').sort(function(){return 0.5-Math.random()}).join('');
+		}
+	},
+	template:`
+		<div class="card">
+			<header>
+				<button v-on:click="toggleEditor">
+					<i class="fas fa-edit"></i>
+				</button>
+				<button v-on:click="shuffle">
+					<i class="fas fa-random"></i>
+				</button>
+			</header>
+			<main>
+				<h2>{{item.title}}</h2>
+				<hr></hr>
+				<p>{{item.content}}</p>
+			</main>
+			<footer>
+				<button v-on:click="$emit(\'remove\')">{{item.rmv}}</button>
+			</footer>
+		</div>
+	`//end template
+});
+
+addCard.onclick = ()=>{
+	app.addItem();
+}
+
+
+</script>
+<!-- end body -->
+</body>
+</html>
