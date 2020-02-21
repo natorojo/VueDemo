@@ -11,10 +11,15 @@
 <!-- start body -->
 <div id="app">
 	<div id="sideBar">
-		<h1>{{branding}}</h1>
-		<p>You can change the text above with this input</p>
-		<input v-model="branding">
-		<button id="addCard">Add A card</button>
+		<button id="menuToggle">
+			<i class="fas fa-bars"></i>
+		</button>
+		<div>
+			<h1>{{branding}}</h1>
+			<p>You can change the text above with this input</p>
+			<input v-model="branding">
+			<button id="addCard">Add A card</button>
+		</div>
 	</div>
 	<transition-group name="list" tag="div" id="content">
 		<basic-card
@@ -113,6 +118,10 @@ addCard.onclick = ()=>{
 	app.addItem();
 }
 
+menuToggle.onclick = ()=>{
+	console.log('yo');
+	sideBar.classList.toggle('closed');
+}
 
 </script>
 <!-- end body -->
