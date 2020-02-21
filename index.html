@@ -12,7 +12,7 @@
 <!-- start body -->
 <div id="app">
 	<div id="sideBar">
-		<button id="menuToggle">
+		<button id="menuToggle" onclick="toggleMenu()">
 			<i class="fas fa-bars"></i>
 		</button>
 		<div>
@@ -114,16 +114,13 @@ Vue.component('basic-card',{
 		</div>
 	`//end template
 });
-
-addCard.onclick = ()=>{
+addCard.addEventListener('click',function(){
 	app.addItem();
-}
+});
 
-menuToggle.onclick = ()=>{
-	console.log('yo');
+function toggleMenu(){
 	sideBar.classList.toggle('closed');
 }
-
 </script>
 <!-- end body -->
 </body>
