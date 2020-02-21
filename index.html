@@ -17,24 +17,40 @@
 		</button>
 		<div>
 			<h1>{{branding}}</h1>
-			<p>You can change the text above with this input</p>
+			<p>Change the text in the input below:</p>
 			<input v-model="branding">
-			<button id="addCard">Add A card</button>
+			<p>Click to add a card:</p>
+			<button id="addCard">Add a Card</button>
+			<p>Click to mix up all the cards:</p>
+			<button  id="shuffleCards">Shuffle Cards</button>
 		</div>
 	</div>
-	<transition-group name="list" tag="div" id="content">
-		<basic-card
-			v-for="item in items"
-			v-bind:key="item.idx"
-			v-bind:item="item"
-			v-on:remove="remove(item.idx)"
-		></basic-card>
-	</transition-group>
+	<div id="content">
+		<header id="contentHeader">
+			<h2>
+				This is a demo of Vue.js
+			</h2>
+			<p>
+				Vue makes synching data with the UI a breeze. Click the "Add Content" buton in the side-menu to add more to the UI. Vue handles the creation and animation of the data that is displayed. You can also hide the side menu but clicking the green menu button.
+			</p>
+		</header>
+		<transition-group name="list" tag="div" class="cards">
+			<basic-card
+				v-for="(item,i) in items"
+				v-bind:key="item.idx"
+				v-bind:item="item"
+				v-on:remove="remove(i)"
+			></basic-card>
+		</transition-group>
+	</div>
 	<transition name="fade">
 		<div v-show="editor.open" id="editor" v-on:click="editor.open=!editor.open">
 			<div v-on:click.stop>
 				<button v-on:click="editor.open=!editor.open">Close</button>
 				<h3>Editor</h3>
+				<p>
+					Using Vue's <a href="v-directive">v-model directive</a> it is very easy to keep all data synched. Even while the user is making edits.
+				</p>
 				<input v-model="editor.dataToEdit.title">
 				<textarea v-model="editor.dataToEdit.content"></textarea>
 			</div>
@@ -43,43 +59,10 @@
 </div>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
 
 <!-- start vue script -->
 <script type="text/javascript">
-
-let app = new Vue({
-	el:'#app',
-	data:{
-		items:[],
-		branding:'Vue.js Demo',
-		editor:{
-			open:false,
-			dataToEdit:{
-				title:null,
-				content:null,
-			}
-		}//end editor data
-	},//end data
-	methods:{
-		addItem:function(){
-			this.items.push({
-				title:'Lorem Ipsum',
-				content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-				rmv:'delete',
-				idx:this.items.length
-			});
-		},
-		remove:function(idx){
-			this.numItems
-			this.items.splice(idx,1);
-			//reset all idx so delete works
-			//as expected
-			this.items.forEach((item,idx)=>{
-				item.idx = idx;
-			})
-		}
-	}
-});
 //make card list component
 Vue.component('basic-card',{
 	props:['item'],
@@ -97,10 +80,10 @@ Vue.component('basic-card',{
 		<div class="card">
 			<header>
 				<button v-on:click="toggleEditor">
-					<i class="fas fa-edit"></i>
+					<i class="fas fa-edit"></i> Edit
 				</button>
 				<button v-on:click="shuffle">
-					<i class="fas fa-random"></i>
+					<i class="fas fa-random"></i> Shuffle
 				</button>
 			</header>
 			<main>
@@ -114,8 +97,69 @@ Vue.component('basic-card',{
 		</div>
 	`//end template
 });
+let app = new Vue({
+	el:'#app',
+	data:{
+		items:[{
+			title:'Lorem Ipsum',
+			content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+			rmv:'delete',
+			idx:0
+		},{
+			title:'Lorem Ipsum',
+			content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+			rmv:'delete',
+			idx:1
+		},{
+			title:'Lorem Ipsum',
+			content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+			rmv:'delete',
+			idx:2
+		}],//end items
+		UID:3,
+		branding:'Vue.js Demo',
+		editor:{
+			open:false,
+			dataToEdit:{
+				title:null,
+				content:null,
+			}
+		}//end editor data
+	},//end data
+	methods:{
+		addItem:function(){
+			this.items.push({
+				title:'Lorem Ipsum',
+				content:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+				rmv:'delete',
+				idx:this.UID++
+			});
+		},
+		resetIdx:function(){
+			//reset all idx so delete works
+			//as expected
+			this.items.forEach((item,idx)=>{
+				item.idx = idx;
+			});
+		},
+		remove:function(idx){
+			this.items.splice(idx,1);
+			//this.resetIdx();
+		},
+		shuffleCards:function(){
+			this.items = _.shuffle(this.items);
+			//animation takes 1 second so wait then update idx
+			//setTimeout(this.resetIdx,1200);
+		}
+	}
+});
+
 addCard.addEventListener('click',function(){
 	app.addItem();
+});
+
+shuffleCards.addEventListener('click',function(){
+	app.shuffleCards();
 });
 
 function toggleMenu(){
