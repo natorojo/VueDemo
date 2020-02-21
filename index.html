@@ -135,21 +135,11 @@ let app = new Vue({
 				idx:this.UID++
 			});
 		},
-		resetIdx:function(){
-			//reset all idx so delete works
-			//as expected
-			this.items.forEach((item,idx)=>{
-				item.idx = idx;
-			});
-		},
 		remove:function(idx){
 			this.items.splice(idx,1);
-			//this.resetIdx();
 		},
 		shuffleCards:function(){
 			this.items = _.shuffle(this.items);
-			//animation takes 1 second so wait then update idx
-			//setTimeout(this.resetIdx,1200);
 		}
 	}
 });
